@@ -9,7 +9,7 @@ the execution time of just generating the mandelbrot set, not the file output ti
 
 Running each program 10 times produced the following results on my crummy laptop (specs below)
 
-            | Median Time | Average Time | Standard Deviation
--------------------------------------------------------------
-mandel.jl:  | 0.0         | 0.0          | 0.0
-mandel.c    | 0.0         | 0.0          | 0.0
+|            | Median Time | Average Time | Standard Deviation |
+|------------|-------------|--------------|--------------------|
+|mandel.jl:  | 0.0         | 0.0          | 0.0                |
+|mandel.c    | 0.0         | 0.0          | 0.0                |
