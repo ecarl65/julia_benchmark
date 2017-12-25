@@ -3,7 +3,7 @@
 all: fast slow basic
 
 fast:
-	gcc -o mandel_fast -pipe -Wall -O3 -ffast-math -fno-finite-math-only -march=native -mfpmath=sse -msse3 mandel.c
+	gcc -o mandel_fast -pipe -Wall -O3 -ffast-math -ffinite-math-only -march=native -mfpmath=sse -msse3 mandel.c
 
 slow:
 	gcc -o mandel_slow -Wall mandel.c
