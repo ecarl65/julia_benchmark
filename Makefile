@@ -12,5 +12,5 @@ basic:
 	gcc -o mandel_basic -Wall -O3 mandel.c
 
 clean:
-	rm mandel_fast mandel_slow mandel_basic
+	$(RM) mandel_*
 
