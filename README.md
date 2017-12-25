@@ -13,10 +13,10 @@ the execution time of just generating the mandelbrot set, not the file output ti
 ## Results
 Running each program 10 times produced the following results on my crummy laptop (specs below)
 
-|            | Median Time | Average Time | Standard Deviation   |
-|------------|-------------|--------------|----------------------|
-|mandel.jl   | 0.586330067 | 0.5870916313 | 0.003496055297644133 |
-|mandel.c    | 0.3717155   | 0.3676821    | 0.009663187654990225 |
+|             | Median Time | Average Time | Standard Deviation   |
+|-------------|-------------|--------------|----------------------|
+| `mandel.jl` | 0.586330067 | 0.5870916313 | 0.003496055297644133 |
+| `mandel.c`  | 0.3717155   | 0.3676821    | 0.009663187654990225 |
 
 ## C Compilation
 
