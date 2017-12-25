@@ -22,7 +22,7 @@ Running each program 10 times produced the following results on my crummy laptop
 
 The above results are using the "fast" version of the C program, with more aggressive compilation flags:
 
-    gcc -o mandel_fast -pipe -Wall -O3 -ffast-math -fno-finite-math-only -march=native -mfpmath=sse -msse3 mandel.c
+    gcc -o mandel_fast -pipe -Wall -O3 -ffast-math -ffinite-math-only -march=native -mfpmath=sse -msse3 mandel.c
 
 ## Machine Specs
 
