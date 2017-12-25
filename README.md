@@ -28,12 +28,11 @@ The above results are using the "fast" version of the C program, with more aggre
 ## Machine Specs
 
 
-| Field           | Value                                                                |
-|-----------------|----------------------------------------------------------------------|
-| processor       | 3                                                                    |
-| num_cores/procs | 4                                                                    |
-| vendor_id       | GenuineIntel                                                         |
-| cpu family      | 6
+| Field           | Value |
+|-----------------|--------------------------------|
+| processor       | (4 entries with values of 0-3) |
+| vendor_id       | GenuineIntel |
+| cpu family      | 6 |
 | model           | 78 |
 | model name      | Intel(R) Core(TM) i5-6200U CPU @ 2.30GHz |
 | stepping        | 3 |
