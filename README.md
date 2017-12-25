@@ -57,7 +57,5 @@ The above results are using the "fast" version of the C program, with more aggre
 | cache_alignment | 64 |
 | address sizes   | 39 bits physical, 48 bits virtual |
 | power management| |
-|-----------------|-----------------------------------------------|
-
 
 
