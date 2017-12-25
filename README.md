@@ -28,7 +28,7 @@ The above results are using the "fast" version of the C program, with more aggre
 ## Machine Specs
 
 
-
+| Field           | Value                                                                |
 |-----------------|----------------------------------------------------------------------|
 | processor       | 3                                                                    |
 | num_cores/procs | 4                                                                    |
