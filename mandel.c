@@ -39,7 +39,7 @@ int main() {
     double before = stopwatch();
     mandel(data);
     double after = stopwatch();
-    fprintf(stderr, "%lf seconds\n", after - before);
+    fprintf(stderr, "elapsed time: %lf seconds\n", after - before);
     printf("P5 1500 1000 255\n");
     fwrite(data, 1, 1500*1000, stdout);
 
