@@ -11,10 +11,10 @@ the execution time of just generating the mandelbrot set, not the file output ti
 ## Results
 Running the computation loop only 100 times produced the following results on my crummy laptop (specs below)
 
-|             | Median Time | Average Time | Standard Deviation |
-|-------------|-------------|--------------|--------------------|
-| `mandel.jl` | 0.530034    | 0.530958     | 0.003504 |
-| `mandel.c`  | 0.343888    | 0.345841     | 0.001958 |
+|             | Number Trials | Minimum Execution Time |
+|-------------|---------------|------------------------|
+| `mandel.jl` | 100           | 0.339978 |
+| `mandel.c`  | 100           | 0.516530 |
 
 ## C Compilation
 
@@ -59,5 +59,4 @@ The Julia assembly language generation was done from the REPL after importing th
 | cache_alignment | 64 |
 | address sizes   | 39 bits physical, 48 bits virtual |
 | power management| |
-
 

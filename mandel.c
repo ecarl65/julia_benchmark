@@ -5,8 +5,8 @@
 
 typedef long long int64;
 
-//__attribute__ ((noinline)) static void mandel(unsigned char* data) {
-static void mandel(unsigned char* data) {
+__attribute__ ((noinline)) static void mandel(unsigned char* data) {
+//static void mandel(unsigned char* data) {
     for (int ii = 0; ii<1000; ii++) {
         double im = (ii - 500)*.002;
         for (int jj = 0; jj<1500; jj++) {
@@ -36,48 +36,19 @@ static inline double stopwatch() {
     return ts.tv_sec + 1e-9*ts.tv_nsec;
 }
 
-static inline double compute_mean(double vals[], int N) {
-    double avg = 0.0;
-    for (int m = 0; m < N; m++) {
-        avg += vals[m];
+static inline double compute_min(double vals[], int N) {
+
+    if (N < 0) {
+        fprintf(stderr, "ERROR: Not enough values in array\n");
+        return -1.0;
     }
 
-    avg /= (double) N;
-
-    return avg;
-}
-
-// the compare function for double values
-static int compare (const void * a, const void * b)
-{
-    if (*(double*)a > *(double*)b) return 1;
-    else if (*(double*)a < *(double*)b) return -1;
-    else return 0;  
-}
-
-static inline double compute_median(double vals[], int N) {
-    double median = 0;
-
-    qsort(&vals[0], N, sizeof(double), compare);
-
-    if (N % 2) {
-        median = vals[N/2];
-    } else {
-        median = (vals[N/2 - 1] + vals[N/2]) / 2.0;
+    double min = vals[0];
+    for (int m = 1; m < N; m++) {
+        min = vals[m] < min ? vals[m] : min;
     }
 
-    return median;
-}
-
-
-static inline double compute_std(double vals[], int N, double mean) {
-    double sum_sq = 0.0f;
-    for (int m = 0; m < N; m++) {
-        sum_sq = (vals[m] - mean) * (vals[m] - mean);
-    }
-    double std_dev = sqrt(sum_sq / ((double) (N - 1)));
-
-    return std_dev;
+    return min;
 }
 
 int main(int argc, char *argv[]) {
@@ -96,17 +67,9 @@ int main(int argc, char *argv[]) {
         times[m] = after - before;
     }
 
-    double mean = compute_mean(times, N);
-    double median = compute_median(times, N);
-    double std = compute_std(times, N, mean);
-    
-    // Print results
     fprintf(stderr, "number of trials: %d\n", N);
-    fprintf(stderr, "mean elapsed time: %lf seconds\n", mean);
-    fprintf(stderr, "median elapsed time: %lf seconds\n", median);
-    fprintf(stderr, "standard deviation of elapsed times: %lf seconds\n", std);
+    fprintf(stderr, "min elapsed time: %lf seconds\n", compute_min(times, N));
 
-    //fprintf(stderr, "elapsed time: %lf seconds\n", after - before);
     printf("P5 1500 1000 255\n");
     fwrite(data, 1, 1500*1000, stdout);
 

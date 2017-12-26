@@ -1,3 +1,4 @@
+#!/usr/bin/env julia
 function mandelbrot(M::Array{UInt8, 2})
 
     z::Complex{Float64} = 0.0 
@@ -33,9 +34,7 @@ for m = 1:N
 end
 
 @printf(STDERR, "number of trials: %d\n", N)
-@printf(STDERR, "mean elapsed time: %.6f\n", mean(times))
-@printf(STDERR, "median elapsed time: %.6f\n", median(times))
-@printf(STDERR, "standard deviation of elapsed times: %.6f\n", std(times))
+@printf(STDERR, "min elapsed time: %.6f\n", minimum(times))
 
 write(STDOUT, "P5 1500 1000 255\n")
 write(STDOUT, M)
