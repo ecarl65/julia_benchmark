@@ -9,12 +9,12 @@ equivalent structure in Julia. Both versions will produce an output on standard 
 the execution time of just generating the mandelbrot set, not the file output time, and output it to standard error.
 
 ## Results
-Running each program 10 times produced the following results on my crummy laptop (specs below)
+Running the computation loop only 100 times produced the following results on my crummy laptop (specs below)
 
-|             | Median Time | Average Time | Standard Deviation   |
-|-------------|-------------|--------------|----------------------|
-| `mandel.jl` | 0.566598846 | 0.5671196473 | 0.003800356532448803 |
-| `mandel.c`  | 0.371234    | 0.3709791    | 0.001235028785089647 |
+|             | Median Time | Average Time | Standard Deviation |
+|-------------|-------------|--------------|--------------------|
+| `mandel.jl` | 0.530034    | 0.530958     | 0.003504 |
+| `mandel.c`  | 0.343888    | 0.345841     | 0.001958 |
 
 ## C Compilation
 

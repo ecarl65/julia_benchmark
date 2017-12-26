@@ -20,10 +20,22 @@ function mandelbrot(M::Array{UInt8, 2})
     end
 end
 
+# Parse arguments and set up arrays
+N = 100
+if length(ARGS) >= 1
+    N = parse(Int64, ARGS[1])
+end
 M = zeros(UInt8, 1500, 1000)
+times = zeros(Float64, N)
 
-timed = @elapsed mandelbrot(M)
-write(STDERR, "elapsed time $timed\n")
+for m = 1:N
+    times[m] = @elapsed mandelbrot(M)
+end
+
+@printf(STDERR, "number of trials: %d\n", N)
+@printf(STDERR, "mean elapsed time: %.6f\n", mean(times))
+@printf(STDERR, "median elapsed time: %.6f\n", median(times))
+@printf(STDERR, "standard deviation of elapsed times: %.6f\n", std(times))
 
 write(STDOUT, "P5 1500 1000 255\n")
 write(STDOUT, M)
