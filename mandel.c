@@ -3,6 +3,7 @@
 
 typedef long long int64;
 
+//__attribute__ ((noinline)) static void mandel(unsigned char* data) {
 static void mandel(unsigned char* data) {
     for (int ii = 0; ii<1000; ii++) {
         double im = (ii - 500)*.002;
