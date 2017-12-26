@@ -1,4 +1,4 @@
-julia> clipboard(code_native(mandelbrot, Tuple{Array{UInt8,2}}))
+julia> code_native(mandelbrot, Tuple{Array{UInt8,2}})
         .text
 Filename: mandel.jl
         pushq   %rbp
@@ -11,11 +11,11 @@ Source line: 30
         movq    32(%rdi), %r8
         movl    $1, %r9d
         xorl    %edx, %edx
-        movabsq $140689279117512, %rax  # imm = 0x7FF4C68168C8
+        movabsq $140383920422456, %rax  # imm = 0x7FADADB57E38
         movsd   (%rax), %xmm9           # xmm9 = mem[0],zero
 Source line: 22
         xorpd   %xmm8, %xmm8
-        movabsq $140689279117528, %rax  # imm = 0x7FF4C68168D8
+        movabsq $140383920422472, %rax  # imm = 0x7FADADB57E48
         movsd   (%rax), %xmm0           # xmm0 = mem[0],zero
         nopl    (%rax,%rax)
 Source line: 20
@@ -99,7 +99,7 @@ Source line: 30
         popq    %rbp
         retq
 L328:
-        movabsq $140689279117520, %rax  # imm = 0x7FF4C68168D0
+        movabsq $140383920422464, %rax  # imm = 0x7FADADB57E40
 Source line: 22
         addsd   (%rax), %xmm2
         xorl    %eax, %eax
@@ -145,6 +145,6 @@ L445:
 Source line: 24
 L480:
         movabsq $jl_throw, %rax
-        movabsq $140689547381256, %rdi  # imm = 0x7FF4D67ECA08
+        movabsq $140384189336072, %rdi  # imm = 0x7FADBDBCCA08
         callq   *%rax
         nopw    %cs:(%rax,%rax)
