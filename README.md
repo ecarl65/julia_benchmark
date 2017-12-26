@@ -21,6 +21,12 @@ Running each program 10 times produced the following results on my crummy laptop
 The above results are using the "fast" version of the C program, with more aggressive compilation flags:
 
     gcc -o mandel_fast -pipe -Wall -O3 -ffast-math -ffinite-math-only -march=native -mfpmath=sse -msse3 mandel.c
+    
+For the assembly generation the `mandelbrot` function was ensured to not be inlined and I added `-ggdb3` to the compilation flags.
+
+## Julia Compilation
+
+The Julia assembly language generation was done from the REPL after importing the file and calling `code_native(mandelbrot, Tuple{Array{UInt8,2}})`. When the Julia version of the program was called there were no special compilation flags, it was called like `julia mandel.jl > mandel_julia.pbm`.
 
 ## Machine Specs
 
