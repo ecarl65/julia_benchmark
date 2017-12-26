@@ -8,7 +8,7 @@ function mandelbrot(M::Array{UInt8, 2})
         c = (ii - 501) * 0.002im
         for jj = 1:1500
             c = (jj - 1001) * 0.002 + c.im * 1im
-            z = c
+            z = copy(c)
             for cc = 0:255
                 z = z^2 + c
                 if abs2(z) > 4
