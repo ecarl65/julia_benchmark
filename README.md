@@ -5,18 +5,16 @@ This is a quick and dirty set of files to test Julia against C on the Mandelbrot
 I started out with a 
 [C mandelbrot version passed to me](https://github.com/xscott/working/blob/master/excess0/mandel.c) 
 and attempted to implement the 
-equivalent structure in Julia. Both versions will produce an output, with the Julia 
-output currently hardcoded to "mandel_julia.pbm". The C program produces an output to 
-the stdout, meaning it needs to redirect output to a file. Both programs also measure 
-the execution time of just generating the mandelbrot set, not the file output time.
+equivalent structure in Julia. Both versions will produce an output on standard output. Both programs also measure 
+the execution time of just generating the mandelbrot set, not the file output time, and output it to standard error.
 
 ## Results
 Running each program 10 times produced the following results on my crummy laptop (specs below)
 
 |             | Median Time | Average Time | Standard Deviation   |
 |-------------|-------------|--------------|----------------------|
-| `mandel.jl` | 0.586330067 | 0.5870916313 | 0.003496055297644133 |
-| `mandel.c`  | 0.3717155   | 0.3676821    | 0.009663187654990225 |
+| `mandel.jl` | 0.566598846 | 0.5671196473 | 0.003800356532448803 |
+| `mandel.c`  | 0.371234    | 0.3709791    | 0.001235028785089647 |
 
 ## C Compilation
 

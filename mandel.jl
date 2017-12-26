@@ -1,15 +1,3 @@
-function mandel(z)
-    c = z
-    maxiter = 80
-    for n = 1:maxiter
-        if abs2(z) > 4
-            return n-1
-        end
-        z = z^2 + c
-    end
-    return maxiter
-end
-
 function mandelbrot(M::Array{UInt8, 2})
 
     z::Complex{Float64} = 0.0 
@@ -32,17 +20,11 @@ function mandelbrot(M::Array{UInt8, 2})
     end
 end
 
-#println(mandel(0))
-
 M = zeros(UInt8, 1500, 1000)
 
-tic()
-mandelbrot(M)
-toc()
+timed = @elapsed mandelbrot(M)
+write(STDERR, "elapsed time $timed\n")
 
-outfile = "mandel_julia.pbm"
-output = open(outfile, "w")
-write(output, "P5 1500 1000 255\n")
-write(output, M)
-close(output)
+write(STDOUT, "P5 1500 1000 255\n")
+write(STDOUT, M)
 
