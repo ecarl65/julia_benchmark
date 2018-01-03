@@ -4,4 +4,6 @@ mandel_slow
 mandel_basic_gdb
 mandel_fast_gdb
 mandel_slow_gdb
+nbody
+*.class
 *.pbm
