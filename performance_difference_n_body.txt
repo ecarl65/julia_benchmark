@@ -1,0 +1,17 @@
+ecc@eccmint ~/programming/julia_benchmark $ time julia nbody.jl 1000000
+-0.169075164
+-0.169086185
+ 90.399003 seconds (156.40 M allocations: 9.587 GiB, 0.61% gc time)
+
+real    1m31.009s
+user    1m30.556s
+sys     0m0.636s
+ecc@eccmint ~/programming/julia_benchmark $ time ./nbody_c 1000000
+-0.169075164
+-0.169086185
+
+real    0m0.111s
+user    0m0.108s
+sys     0m0.000s
+ecc@eccmint ~/programming/julia_benchmark $ 
+
