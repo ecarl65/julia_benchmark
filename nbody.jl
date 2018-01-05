@@ -59,10 +59,15 @@ bodies = [
                5.15138902046611451e-05 * SOLAR_MASS),
          ]
 
+# Pre-define some arrays and values globally to reduce the amount of copying
+dx = zeros(3);
+distance = 0.;
+energy = 0.;
+
 """
 Not sure exactly what this is supposed to be doing
 """
-function offset_momentum(bodies::Array{Body, 1})
+function offset_momentum()
     for i = 1:length(bodies)
         for k = 1:3
             bodies[1].v[k] -= bodies[i].v[k] * bodies[i].mass / SOLAR_MASS;
@@ -73,14 +78,14 @@ end
 """
 Advance the positions and velocities
 """
-function bodies_advance(bodies::Array{Body, 1}, dt::Float64)
-    dx = [0., 0., 0.];
+function bodies_advance(dt::Float64)
+    dx .= zeros(3);
     dsq = 0.;
     distance = 0.;
     mag = 0.;
 
-    @simd for i = 1:length(bodies)
-        @simd for j = (i+1):length(bodies)
+    for i = 1:length(bodies)
+        for j = (i+1):length(bodies)
             dx = bodies[i].x - bodies[j].x;
 
             dsq = dot(dx, dx);
@@ -92,7 +97,7 @@ function bodies_advance(bodies::Array{Body, 1}, dt::Float64)
         end
     end
 
-    @simd for k = 1:length(bodies)
+    for k = 1:length(bodies)
         bodies[k].x += dt * bodies[k].v;
     end
 end
@@ -100,8 +105,8 @@ end
 """
 Compute the overall energy in the system
 """
-function bodies_energy(bodies::Array{Body, 1})
-    dx = [0., 0., 0.];
+function bodies_energy()
+    dx .= zeros(3);
     distance = 0.;
     energy = 0.;
 
@@ -119,17 +124,19 @@ function bodies_energy(bodies::Array{Body, 1})
 end
 
 
-function main_loop(bodies::Array{Body, 1}, N::Int64)
+function main_loop(N::Int64)
 
-    offset_momentum(bodies);
+    # Pre-allocate some arrays and variables
 
-    @printf "%.9f\n" bodies_energy(bodies);
+    offset_momentum();
 
-    for i = 1:N
-        bodies_advance(bodies, 0.01);
-    end
+    @printf "%.9f\n" bodies_energy();
 
-    @printf "%.9f\n" bodies_energy(bodies);
+    (for i = 1:N; bodies_advance(0.01); end)
+
+    #Profile.print()
+
+    @printf "%.9f\n" bodies_energy();
 
 end
 
@@ -138,4 +145,5 @@ if length(ARGS) >= 1
     N = parse(Int64, ARGS[1]);
 end
 
-@time main_loop(bodies, N);
+@time main_loop(N);
+#main_loop(N);
