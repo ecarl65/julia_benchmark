@@ -6,6 +6,7 @@
 # modified by Maciej Fijalkowski
 # 2to3
 # modified by Andriy Misyura
+# modified to Cythonize by Eric Carlsen
 
 import sys
 from libc cimport math
@@ -22,24 +23,24 @@ PI = 3.14159265358979323
 SOLAR_MASS = 4 * PI * PI
 DAYS_PER_YEAR = 365.24
 
-cdef struct c_body:
-    double x[3]
-    double v[3]
-    double mass
-
-cdef c_body c_bodies[5]
-c_bodies[0].x = [0.0, 0.0, 0.0]
-c_bodies[0].v = [0.0, 0.0, 0.0]
-c_bodies[0].mass = SOLAR_MASS
-
-c_bodies[1].x = [4.84143144246472090e+00,
-                 -1.16032004402742839e+00,
-                 -1.03622044471123109e-01]
-c_bodies[1].v = [1.66007664274403694e-03 * DAYS_PER_YEAR,
-                 7.69901118419740425e-03 * DAYS_PER_YEAR,
-                 -6.90460016972063023e-05 * DAYS_PER_YEAR]
-c_bodies[1].mass = 9.54791938424326609e-04 * SOLAR_MASS
-
+# TODO Begin transitioning to using C structure to hold body information
+# cdef struct c_body:
+#     double x[3]
+#     double v[3]
+#     double mass
+# 
+# cdef c_body c_bodies[5]
+# c_bodies[0].x = [0.0, 0.0, 0.0]
+# c_bodies[0].v = [0.0, 0.0, 0.0]
+# c_bodies[0].mass = SOLAR_MASS
+# 
+# c_bodies[1].x = [4.84143144246472090e+00,
+#                  -1.16032004402742839e+00,
+#                  -1.03622044471123109e-01]
+# c_bodies[1].v = [1.66007664274403694e-03 * DAYS_PER_YEAR,
+#                  7.69901118419740425e-03 * DAYS_PER_YEAR,
+#                  -6.90460016972063023e-05 * DAYS_PER_YEAR]
+# c_bodies[1].mass = 9.54791938424326609e-04 * SOLAR_MASS
 
 BODIES = {
     'sun': ([0.0, 0.0, 0.0], [0.0, 0.0, 0.0], SOLAR_MASS),
@@ -134,10 +135,10 @@ def main(int n=5000000, ref='sun'):
     advance(0.01, n)
     report_energy()
 
-    print("c_bodies[1] = %s" % c_bodies[1])
-
 if __name__ == '__main__':
-    if len(sys.argv) > 1: N = int(sys.argv[1])
-    else: N = 5000000
+    if len(sys.argv) > 1: 
+        N = int(sys.argv[1])
+    else: 
+        N = 5000000
 
     main(N)
