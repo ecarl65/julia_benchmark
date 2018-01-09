@@ -8,3 +8,7 @@ nbody_c
 nbody_cc
 *.class
 *.pbm
+__pycache__/
+*.so
+*.o
+build/
