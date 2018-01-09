@@ -1,3 +1,7 @@
+#!python
+#cython: language_level=2, wraparound=False, nonecheck=False, boundscheck=False
+#cython: profile=True
+
 # The Computer Language Benchmarks Game
 # http://benchmarksgame.alioth.debian.org/
 #
