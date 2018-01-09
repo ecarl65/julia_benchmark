@@ -12,3 +12,4 @@ __pycache__/
 *.so
 *.o
 build/
+cython_nbody2.c
