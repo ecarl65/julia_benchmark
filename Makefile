@@ -1,11 +1,8 @@
 
-#CC = gcc -std=c99 -Wall -Wextra -g -O2 -D_GNU_SOURCE
-CC = gcc -std=c99 -Wall -Wextra -O3 -D_GNU_SOURCE
-
 all: fast slow basic nbody_c nbody_cc
 
 fast: mandel.c
-	gcc -o mandel_fast -pipe -std=c99 -Wall -O3 -D_GNU_SOURCE -ffast-math -ffinite-math-only -march=native -mfpmath=sse -msse3 mandel.c -lm
+	gcc -o mandel_fast -std=c99 -pipe -Wall -O3 -D_GNU_SOURCE -ffast-math -ffinite-math-only -march=native -mfpmath=sse -msse3 mandel.c -lm
 
 slow: mandel.c
 	gcc -o mandel_slow -std=c99 -Wall -D_GNU_SOURCE mandel.c -lm
@@ -21,5 +18,4 @@ nbody_c: nbody.c
 
 clean:
 	$(RM) mandel_* nbody_*
-
 
