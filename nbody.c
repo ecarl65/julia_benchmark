@@ -150,7 +150,9 @@ double bodies_energy(struct body *bodies, unsigned int nbodies) {
 
 int main(int argc, char** argv)
 {
-   int i, n = atoi(argv[1]);
+   int i;
+   int n = 5000000;
+   if (argc > 1) n = atoi(argv[1]);
    offset_momentum(solar_bodies, BODIES_SIZE);
    printf("%.9f\n", bodies_energy(solar_bodies, BODIES_SIZE));
    for (i = 0; i < n; ++i)

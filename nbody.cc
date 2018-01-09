@@ -202,7 +202,8 @@ class NBodySystem {
 };
 
 int main(int argc, char** argv) {
-    int n = atoi(argv[1]);
+    int n = 5000000;
+    if (argc > 1) n = atoi(argv[1]);
 
     NBodySystem bodies;
     printf("%.9f\n", bodies.energy());
