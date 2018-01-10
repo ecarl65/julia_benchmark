@@ -1,14 +1,16 @@
-# julia_benchmark
+# Benchmarks
 
-## Introduction
-This is a quick and dirty set of files to test Julia against C on the Mandelbrot set.
+## Mandelbrot
+
+### Introduction
+This is a quick and dirty set of files to test Julia (and other languages) against C on the Mandelbrot set (and on the N-Body problem).
 I started out with a 
 [C mandelbrot version passed to me](https://github.com/xscott/working/blob/master/excess0/mandel.c) 
 and attempted to implement the 
 equivalent structure in Julia. Both versions will produce an output on standard output. Both programs also measure 
 the execution time of just generating the mandelbrot set, not the file output time, and output it to standard error.
 
-## Results
+### Results
 Running the computation loop only 100 times produced the following results on my crummy laptop (specs below)
 
 |             | Number Trials | Minimum Execution Time |
@@ -16,7 +18,7 @@ Running the computation loop only 100 times produced the following results on my
 | `mandel.jl` | 100           | 0.339978 |
 | `mandel.c`  | 100           | 0.516530 |
 
-## C Compilation
+### C Compilation
 
 The above results are using the "fast" version of the C program, with more aggressive compilation flags:
 
@@ -24,11 +26,11 @@ The above results are using the "fast" version of the C program, with more aggre
     
 For the assembly generation the `mandelbrot` function was ensured to not be inlined and I added `-ggdb3` to the compilation flags.
 
-## Julia Compilation
+### Julia Compilation
 
 The Julia assembly language generation was done from the REPL after importing the file and calling `code_native(mandelbrot, Tuple{Array{UInt8,2}})`. When the Julia version of the program was called there were no special compilation flags, it was called like `julia mandel.jl > mandel_julia.pbm`.
 
-## Machine Specs
+### Machine Specs
 
 
 | Field          | Value |
@@ -59,4 +61,29 @@ The Julia assembly language generation was done from the REPL after importing th
 | cache_alignment | 64 |
 | address sizes   | 39 bits physical, 48 bits virtual |
 | power management| |
+
+## N-Body Orbit Determination
+
+This program models the orbit of Jovian planets using a symplectic integrator. For most of the programs I used the code at the [Computer Language Benchmarks Game site](http://benchmarksgame.alioth.debian.org/u64q/nbody-description.html#nbody). Note that in the end my Julia program performed horrendously --- basically unusable. I went online to some Julia forums 
+where they were discussing this exact problem and website and downloaded and ran the "best" version there to get these numbers. I implemented the Cython version myself, with some
+tips from co-workers as to some of the best places to look for optimization. This time the results are presented in roughly the multiple of the C execution speed (approximately 2 
+significant digits).
+
+### Results
+
+| Language         | Execution Time |
+|------------------|----------------|
+| C                |  1x            |
+| C++              | ~1x            |
+| Python (CPython) | ~100-200x      |
+| Python (pypy)    | ~10-20x        |
+| Cython           |  1.4x          |
+| Julia (best)     |  3x            |
+| Julia (clean)    |  8x            |
+| Julia (naïve)    | >1000x         |
+| Java             |  1.6x          |
+
+
+
+
 
