@@ -1,5 +1,5 @@
 #!python
-#cython: language_level=2, wraparound=False, nonecheck=False, boundscheck=False
+#cython: language_level=2, wraparound=False, nonecheck=False, boundscheck=False, cdivision=True
 #cython: profile=True
 
 # The Computer Language Benchmarks Game
@@ -12,7 +12,6 @@
 # modified by Andriy Misyura
 # modified to Cythonize by Eric Carlsen
 
-import sys
 from libc cimport math
 
 DEF NBODIES=5
@@ -140,17 +139,20 @@ cdef offset_momentum(body [NBODIES] bodies=bodies):
     bodies[0].v[2] = px[2] / bodies[0].mass
 
 
-def main(unsigned int n=5000000):
+cpdef main(unsigned int n=5000000):
     cdef unsigned int i
+    cdef double dt=0.01
     offset_momentum()
     report_energy()
-    advance(0.01, n)
+    advance(dt, n)
     report_energy()
 
 
 if __name__ == '__main__':
-    if len(sys.argv) > 1: 
-        N = int(sys.argv[1])
+    from sys import argv
+
+    if len(argv) > 1: 
+        N = int(argv[1])
     else: 
         N = 5000000
 

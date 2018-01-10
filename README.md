@@ -84,6 +84,3 @@ significant digits).
 | Java             |  1.6x          |
 
 
-
-
-
