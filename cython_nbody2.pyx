@@ -10,9 +10,10 @@
 # modified by Maciej Fijalkowski
 # 2to3
 # modified by Andriy Misyura
-# modified to Cythonize by Eric Carlsen
+# modified to Cython by Eric Carlsen
 
-from libc cimport math
+from libc.math cimport sqrt
+from libc.stdio cimport printf
 
 DEF NBODIES=5
 DEF PI = 3.14159265358979323
@@ -86,7 +87,7 @@ cdef advance(double dt, unsigned int n, body [NBODIES] bodies=bodies):
                 dx[2] = bodies[i].x[2] - bodies[j].x[2]
 
                 dsq = dx[0]*dx[0] + dx[1]*dx[1] + dx[2]*dx[2]
-                dist = math.sqrt(dsq)
+                dist = sqrt(dsq)
                 mag = dt / (dsq * dist)
 
                 bodies[i].v[0] -= dx[0] * bodies[j].mass * mag
@@ -117,10 +118,11 @@ cdef report_energy(body [NBODIES] bodies=bodies):
             for k in xrange(3):
                 dx[k] = bodies[i].x[k] - bodies[j].x[k]
 
-            distance = math.sqrt(dx[0]*dx[0] + dx[1]*dx[1] + dx[2]*dx[2])
+            distance = sqrt(dx[0]*dx[0] + dx[1]*dx[1] + dx[2]*dx[2])
             e -= (bodies[i].mass * bodies[j].mass) / distance;
 
-    print("%.9f" % e)
+    # print("%.9f" % e)
+    printf("%.9f\n", e)
 
 
 cdef offset_momentum(body [NBODIES] bodies=bodies):
@@ -140,20 +142,9 @@ cdef offset_momentum(body [NBODIES] bodies=bodies):
 
 
 cpdef main(unsigned int n=5000000):
-    cdef unsigned int i
     cdef double dt=0.01
     offset_momentum()
     report_energy()
     advance(dt, n)
     report_energy()
 
-
-if __name__ == '__main__':
-    from sys import argv
-
-    if len(argv) > 1: 
-        N = int(argv[1])
-    else: 
-        N = 5000000
-
-    main(N)

@@ -1,5 +1,5 @@
 
-all: fast slow basic nbody_c nbody_cc
+all: fast slow basic nbody_c nbody_cc cython_nbody2
 
 fast: mandel.c
 	gcc -o mandel_fast -std=c99 -pipe -Wall -O3 -D_GNU_SOURCE -ffast-math -ffinite-math-only -march=native -mfpmath=sse -msse3 mandel.c -lm
@@ -15,6 +15,10 @@ nbody_cc: nbody.cc
 
 nbody_c: nbody.c
 	gcc -o nbody_c -pipe -Wall -O3 -D_GNU_SOURCE -fomit-frame-pointer -march=native -mfpmath=sse -msse3 nbody.c -lm
+
+cython_nbody2: cython_nbody2.pyx
+	python setup.py build_ext --inplace
+	cython cython_nbody2.pyx -a
 
 clean:
 	$(RM) mandel_* nbody_*
