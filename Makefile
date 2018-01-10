@@ -4,7 +4,7 @@ CXX=g++
 CFLAGS=-pipe -Wall -O3 -D_GNU_SOURCE -fomit-frame-pointer -ffast-math -ffinite-math-only -march=native -mfpmath=sse -msse3
 LDFLAGS=-lm
 
-all: mandel nbody_c nbody_cc cython_nbody2
+all: mandel nbody_c nbody_cc cython_nbody2 cython_doc
 
 mandel: mandel.c
 	$(CC) -o $@ -std=c99 $(CFLAGS)  mandel.c -lm
