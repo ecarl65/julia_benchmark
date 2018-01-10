@@ -1,25 +1,28 @@
 
-all: fast slow basic nbody_c nbody_cc cython_nbody2
+CC=gcc
+CXX=g++
+CFLAGS=-pipe -Wall -O3 -D_GNU_SOURCE -fomit-frame-pointer -ffast-math -ffinite-math-only -march=native -mfpmath=sse -msse3
+LDFLAGS=-lm
 
-fast: mandel.c
-	gcc -o mandel_fast -std=c99 -pipe -Wall -O3 -D_GNU_SOURCE -ffast-math -ffinite-math-only -march=native -mfpmath=sse -msse3 mandel.c -lm
+all: mandel nbody_c nbody_cc cython_nbody2
 
-slow: mandel.c
-	gcc -o mandel_slow -std=c99 -Wall -D_GNU_SOURCE mandel.c -lm
-
-basic: mandel.c
-	gcc -o mandel_basic -std=c99 -Wall -O3 -D_GNU_SOURCE mandel.c -lm
+mandel: mandel.c
+	$(CC) -o $@ -std=c99 $(CFLAGS)  mandel.c -lm
 
 nbody_cc: nbody.cc
-	g++ -o nbody_cc -std=c++11 -Wall -pipe -O3 -fomit-frame-pointer -march=native -mfpmath=sse -msse3  nbody.cc 
+	$(CXX) -o $@ -std=c++11 $(CFLAGS)  $<
 
 nbody_c: nbody.c
-	gcc -o nbody_c -pipe -Wall -O3 -D_GNU_SOURCE -fomit-frame-pointer -march=native -mfpmath=sse -msse3 nbody.c -lm
+	gcc -o $@ $(CFLAGS) $< $(LDFLAGS)
 
-cython_nbody2: cython_nbody2.pyx
+cython_doc: cython_nbody2.pyx 
+	cython $< -a
+
+.PHONY: cython_nbody2 clean cython_doc
+
+cython_nbody2: cython_nbody2.pyx 
 	python setup.py build_ext --inplace
-	cython cython_nbody2.pyx -a
 
 clean:
-	$(RM) mandel_* nbody_*
+	$(RM) mandel nbody_c nbody_cc cython_nbody2.so cython_nbody2.c cython_nbody2.html
 
