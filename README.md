@@ -64,7 +64,7 @@ The Julia assembly language generation was done from the REPL after importing th
 
 ## N-Body Orbit Determination
 
-This program models the orbit of Jovian planets using a symplectic integrator. For most of the programs I used the code at the [Computer Language Benchmarks Game site](http://benchmarksgame.alioth.debian.org/u64q/nbody-description.html#nbody). Note that in the end my Julia program performed horrendously --- basically unusable. I went online to some Julia forums 
+This program models the orbit of Jovian planets using a symplectic integrator. For most of the programs I used the code at the [Computer Language Benchmarks Game site](https://benchmarksgame-team.pages.debian.net/benchmarksgame/description/nbody.html#nbody). Note that in the end my Julia program performed horrendously --- basically unusable. I went online to some Julia forums 
 where they were discussing this exact problem and website and downloaded and ran the "best" version there to get these numbers. I implemented the Cython version myself, with some
 tips from co-workers as to some of the best places to look for optimization. This time the results are presented in roughly the multiple of the C execution speed (approximately 2 
 significant digits).
