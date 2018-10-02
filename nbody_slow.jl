@@ -1,12 +1,15 @@
 # N-body simulation
 # Based off of the Computer Language Benchmarks Game
 
+using Printf
+using LinearAlgebra
+
 # Constants
 const SOLAR_MASS = 4*pi*pi;
 const DAYS_PER_YEAR = 365.24
 
 # Body type
-type Body
+mutable struct Body
     x::Array{Float64}
     fill::Float64
     v::Array{Float64}
