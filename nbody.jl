@@ -1,12 +1,16 @@
 # N-body simulation
 # Based off of the Computer Language Benchmarks Game
 
+using Printf
+using LinearAlgebra
+
+
 # Constants
-const SOLAR_MASS = 4*pi*pi;
+const SOLAR_MASS = 4*pi*pi
 const DAYS_PER_YEAR = 365.24
 
 # Body type
-type Body
+mutable struct Body
     x::Array{Float64}
     fill::Float64
     v::Array{Float64}
@@ -60,9 +64,9 @@ bodies = [
          ]
 
 # Pre-define some arrays and values globally to reduce the amount of copying
-dx = zeros(3);
-distance = 0.;
-energy = 0.;
+dx = zeros(3)
+distance = 0.
+energy = 0.
 
 """
 Not sure exactly what this is supposed to be doing
@@ -70,7 +74,7 @@ Not sure exactly what this is supposed to be doing
 function offset_momentum()
     for i = 1:length(bodies)
         for k = 1:3
-            bodies[1].v[k] -= bodies[i].v[k] * bodies[i].mass / SOLAR_MASS;
+            bodies[1].v[k] -= bodies[i].v[k] * bodies[i].mass / SOLAR_MASS
         end
     end
 end
@@ -79,26 +83,26 @@ end
 Advance the positions and velocities
 """
 function bodies_advance(dt::Float64)
-    dx .= zeros(3);
-    dsq = 0.;
-    distance = 0.;
-    mag = 0.;
+    dx .= zeros(3)
+    dsq = 0.
+    distance = 0.
+    mag = 0.
 
     for i = 1:length(bodies)
         for j = (i+1):length(bodies)
-            dx = bodies[i].x - bodies[j].x;
+            dx = bodies[i].x - bodies[j].x
 
-            dsq = dot(dx, dx);
-            distance = sqrt(dsq);
-            mag = dt / (dsq * distance);
+            dsq = dot(dx, dx)
+            distance = sqrt(dsq)
+            mag = dt / (dsq * distance)
 
-            bodies[i].v -= dx * bodies[j].mass * mag;
-            bodies[j].v += dx * bodies[i].mass * mag;
+            bodies[i].v -= dx * bodies[j].mass * mag
+            bodies[j].v += dx * bodies[i].mass * mag
         end
     end
 
     for k = 1:length(bodies)
-        bodies[k].x += dt * bodies[k].v;
+        bodies[k].x += dt * bodies[k].v
     end
 end
 
@@ -106,21 +110,21 @@ end
 Compute the overall energy in the system
 """
 function bodies_energy()
-    dx .= zeros(3);
-    distance = 0.;
-    energy = 0.;
+    dx .= zeros(3)
+    distance = 0.
+    energy = 0.
 
     for i = 1:length(bodies)
-        energy += bodies[i].mass * dot(bodies[i].v, bodies[i].v) / 2.0;
+        energy += bodies[i].mass * dot(bodies[i].v, bodies[i].v) / 2.0
 
         for j = (i+1):length(bodies)
-            dx = bodies[i].x - bodies[j].x;
+            dx = bodies[i].x - bodies[j].x
 
-            distance = norm(dx);
-            energy -= (bodies[i].mass * bodies[j].mass) / distance;
+            distance = norm(dx)
+            energy -= (bodies[i].mass * bodies[j].mass) / distance
         end
     end
-    return energy;
+    return energy
 end
 
 
@@ -128,22 +132,22 @@ function main_loop(N::Int64)
 
     # Pre-allocate some arrays and variables
 
-    offset_momentum();
+    offset_momentum()
 
-    @printf "%.9f\n" bodies_energy();
+    @printf "%.9f\n" bodies_energy()
 
     (for i = 1:N; bodies_advance(0.01); end)
 
     #Profile.print()
 
-    @printf "%.9f\n" bodies_energy();
+    @printf "%.9f\n" bodies_energy()
 
 end
 
 N = 10000
 if length(ARGS) >= 1
-    N = parse(Int64, ARGS[1]);
+    N = parse(Int64, ARGS[1])
 end
 
-@time main_loop(N);
-#main_loop(N);
+@time main_loop(N)
+#main_loop(N)
