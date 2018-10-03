@@ -276,4 +276,5 @@ N = 5000000
 if length(ARGS) >= 1
     N = parse(Int64, ARGS[1]);
 end
+main(N)
 @time main(N)

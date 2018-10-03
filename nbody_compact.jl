@@ -56,7 +56,6 @@ function offset_momentum(bodies::AbstractVector{Planet}    )
     bodies[1].v = - p / solar_mass
 end
 
-const NBODIES = 5
 const bodies = SVector(
                       Planet( # sun
                              Vec3([0, 0, 0]),
@@ -97,8 +96,9 @@ function main(iterations::Int)
     @printf("%.9f\n", energy(bodies))
 end
 
-N = 5000000
+N = 10000
 if length(ARGS) >= 1
     N = parse(Int64, ARGS[1]);
 end
+main(N)
 @time main(N)
