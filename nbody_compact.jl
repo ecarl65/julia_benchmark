@@ -86,7 +86,7 @@ const bodies = SVector(
                      )
 
 
-function main(iterations::Int)
+function main(iterations::Int, bodies)
     n = iterations
 
     offset_momentum(bodies);
@@ -97,8 +97,10 @@ function main(iterations::Int)
     @printf("%.9f\n", energy(bodies))
 end
 
-N = 5000000
+N = 10000
 if length(ARGS) >= 1
     N = parse(Int64, ARGS[1]);
 end
-@time main(N)
+
+main(N,bodies)
+@time main(N,bodies)
