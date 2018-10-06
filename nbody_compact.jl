@@ -56,7 +56,6 @@ function offset_momentum(bodies::AbstractVector{Planet}    )
     bodies[1].v = - p / solar_mass
 end
 
-const NBODIES = 5
 const bodies = SVector(
                       Planet( # sun
                              Vec3([0, 0, 0]),

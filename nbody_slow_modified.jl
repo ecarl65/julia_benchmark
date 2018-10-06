@@ -4,6 +4,8 @@
 using Printf
 using LinearAlgebra
 
+using Profile
+
 # Constants
 const SOLAR_MASS = 4*pi*pi;
 const DAYS_PER_YEAR = 365.24
@@ -17,7 +19,7 @@ mutable struct Body
 end
 
 # Define each of the body initial values
-bodies = [
+const bodies = [
           # Sun
           Body([0.0, 0.0, 0.0], 0.0, [0.0, 0.0, 0.0], SOLAR_MASS),
 
@@ -82,21 +84,21 @@ function bodies_advance(bodies::Vector{Body}, dt::Float64)
     distance = 0.;
     mag = 0.;
 
-    @simd for i = 1:length(bodies)
-        @simd for j = (i+1):length(bodies)
-            dx = bodies[i].x - bodies[j].x;
+    for i = 1:length(bodies)
+        for j = (i+1):length(bodies)
+            @. dx = bodies[i].x - bodies[j].x;
 
             dsq = dot(dx, dx);
             distance = sqrt(dsq);
             mag = dt / (dsq * distance);
 
-            bodies[i].v -= dx * bodies[j].mass * mag;
-            bodies[j].v += dx * bodies[i].mass * mag;
+            @. bodies[i].v -= dx * bodies[j].mass * mag;
+            @. bodies[j].v += dx * bodies[i].mass * mag;
         end
     end
 
-    @simd for k = 1:length(bodies)
-        bodies[k].x += dt * bodies[k].v;
+    for k = 1:length(bodies)
+        @. bodies[k].x += dt * bodies[k].v;
     end
 end
 
@@ -126,13 +128,16 @@ function main_loop(bodies::Vector{Body}, N::Int64)
 
     offset_momentum(bodies);
 
-    @printf "%.9f\n" bodies_energy(bodies);
+    e1 = bodies_energy(bodies);
+
+    @printf "%.9f\n" e1
 
     for i = 1:N
         bodies_advance(bodies, 0.01);
     end
 
-    @printf "%.9f\n" bodies_energy(bodies);
+    e2 = bodies_energy(bodies);
+    @printf "%.9f\n" e2
 
 end
 
@@ -141,4 +146,5 @@ if length(ARGS) >= 1
     N = parse(Int64, ARGS[1]);
 end
 
-@time main_loop(bodies, N);
+main_loop(bodies, N);
+@allocated time main_loop(bodies, N);

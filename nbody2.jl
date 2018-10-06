@@ -11,59 +11,59 @@ const DAYS_PER_YEAR = 365.24
 
 # Body type
 mutable struct Body
-    x::Vector{Float64}
+    x::MVector{3,Float64}
     fill::Float64
-    v::Vector{Float64}
+    v::MVector{3,Float64}
     mass::Float64
 end
 
 # Define each of the body initial values
-_bodies = SVector(
+_bodies = [
                  # Sun
-                 Body(SVector(0.0, 0.0, 0.0), 
+                 Body(MVector(0.0, 0.0, 0.0), 
                       0.0, 
-                      SVector(0.0, 0.0, 0.0), 
+                      MVector(0.0, 0.0, 0.0), 
                       SOLAR_MASS),
                  # Jupiter
-                 Body(SVector(4.84143144246472090e+00, 
+                 Body(MVector(4.84143144246472090e+00, 
                               -1.16032004402742839e+00, 
                               -1.03622044471123109e-01),
                       0.0,
-                      SVector(1.66007664274403694e-03 * DAYS_PER_YEAR, 
+                      MVector(1.66007664274403694e-03 * DAYS_PER_YEAR, 
                               7.69901118419740425e-03 * DAYS_PER_YEAR, 
                               -6.90460016972063023e-05 * DAYS_PER_YEAR),
                       9.54791938424326609e-04 * SOLAR_MASS),
                  # Saturn
-                 Body(SVector(8.34336671824457987e+00,
+                 Body(MVector(8.34336671824457987e+00,
                               4.12479856412430479e+00,
                               -4.03523417114321381e-01),
                       0.0,
-                      SVector(-2.76742510726862411e-03 * DAYS_PER_YEAR,
+                      MVector(-2.76742510726862411e-03 * DAYS_PER_YEAR,
                               4.99852801234917238e-03 * DAYS_PER_YEAR,
                               2.30417297573763929e-05 * DAYS_PER_YEAR),
                       2.85885980666130812e-04 * SOLAR_MASS),
                  # Uranus
-                 Body(SVector(1.28943695621391310e+01,
+                 Body(MVector(1.28943695621391310e+01,
                               -1.51111514016986312e+01,
                               -2.23307578892655734e-01),
                       0.0,
-                      SVector(2.96460137564761618e-03 * DAYS_PER_YEAR,
+                      MVector(2.96460137564761618e-03 * DAYS_PER_YEAR,
                               2.37847173959480950e-03 * DAYS_PER_YEAR,
                               -2.96589568540237556e-05 * DAYS_PER_YEAR),
                       4.36624404335156298e-05 * SOLAR_MASS),
                  # Neptune
-                 Body(SVector(1.53796971148509165e+01,
+                 Body(MVector(1.53796971148509165e+01,
                               -2.59193146099879641e+01,
                               1.79258772950371181e-01),
                       0.0,
-                      SVector(2.68067772490389322e-03 * DAYS_PER_YEAR,
+                      MVector(2.68067772490389322e-03 * DAYS_PER_YEAR,
                               1.62824170038242295e-03 * DAYS_PER_YEAR,
                               -9.51592254519715870e-05 * DAYS_PER_YEAR),
                       5.15138902046611451e-05 * SOLAR_MASS),
-                )
+                ]
 
 # Pre-define some arrays and values globally to reduce the amount of copying
-const dx = zeros(3)
+# dx = zeros(3)
 
 """
 Not sure exactly what this is supposed to be doing
@@ -80,7 +80,7 @@ end
 Advance the positions and velocities
 """
 function bodies_advance!(bodies,dt::Float64)
-    fill!(dx, 0.0)
+    dx = @MVector zeros(3)
     dsq = 0.
     distance = 0.
     mag = 0.
@@ -99,7 +99,7 @@ function bodies_advance!(bodies,dt::Float64)
     end
 
     for k = 1:length(bodies)
-        bodies[k].x += dt * bodies[k].v
+        @. bodies[k].x += dt * bodies[k].v
     end
 end
 
@@ -107,7 +107,7 @@ end
 Compute the overall energy in the system
 """
 function bodies_energy(bodies)
-    fill!(dx, 0.0)
+    dx = @MVector zeros(3)
     distance = 0.
     energy = 0.
 
@@ -125,7 +125,7 @@ function bodies_energy(bodies)
 end
 
 
-function main_loop(N::Int64,bodies)
+function main_loop(bodies,N::Int64)
 
     # Pre-allocate some arrays and variables
 
@@ -146,5 +146,5 @@ if length(ARGS) >= 1
     N = parse(Int64, ARGS[1])
 end
 
-main_loop(N,_bodies)
-@time main_loop(N,_bodies)
+main_loop(_bodies,N)
+@time main_loop(_bodies,N)
