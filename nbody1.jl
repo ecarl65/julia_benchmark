@@ -4,7 +4,6 @@
 using Printf
 using LinearAlgebra
 
-
 # Constants
 const SOLAR_MASS = 4*pi*pi
 const DAYS_PER_YEAR = 365.24
@@ -18,17 +17,17 @@ mutable struct Body
 end
 
 # Define each of the body initial values
-bodies = [
+_bodies = [
           # Sun
           Body([0.0, 0.0, 0.0], 0.0, [0.0, 0.0, 0.0], SOLAR_MASS),
 
           # Jupiter
-          Body([4.84143144246472090e+00, 
-                -1.16032004402742839e+00, 
+          Body([4.84143144246472090e+00,
+                -1.16032004402742839e+00,
                 -1.03622044471123109e-01],
                0.0,
-               [1.66007664274403694e-03 * DAYS_PER_YEAR, 
-                7.69901118419740425e-03 * DAYS_PER_YEAR, 
+               [1.66007664274403694e-03 * DAYS_PER_YEAR,
+                7.69901118419740425e-03 * DAYS_PER_YEAR,
                 -6.90460016972063023e-05 * DAYS_PER_YEAR],
                9.54791938424326609e-04 * SOLAR_MASS),
 
@@ -69,7 +68,7 @@ const dx = zeros(3)
 """
 Not sure exactly what this is supposed to be doing
 """
-function offset_momentum()
+function offset_momentum(bodies)
     for i = 1:length(bodies)
         for k = 1:3
             bodies[1].v[k] -= bodies[i].v[k] * bodies[i].mass / SOLAR_MASS
@@ -80,7 +79,7 @@ end
 """
 Advance the positions and velocities
 """
-function bodies_advance(dt::Float64)
+function bodies_advance!(bodies,dt::Float64)
     fill!(dx, 0.0)
     dsq = 0.
     distance = 0.
@@ -88,26 +87,26 @@ function bodies_advance(dt::Float64)
 
     for i = 1:length(bodies)
         for j = (i+1):length(bodies)
-            dx .= bodies[i].x .- bodies[j].x
+            @. dx = bodies[i].x - bodies[j].x
 
             dsq = dot(dx, dx)
             distance = sqrt(dsq)
             mag = dt / (dsq * distance)
 
-            bodies[i].v .-= dx .* bodies[j].mass .* mag
-            bodies[j].v .+= dx .* bodies[i].mass .* mag
+            @. bodies[i].v -= dx * bodies[j].mass * mag
+            @. bodies[j].v += dx * bodies[i].mass * mag
         end
     end
 
     for k = 1:length(bodies)
-        bodies[k].x += dt * bodies[k].v
+        bodies[k].x .+= dt .* bodies[k].v
     end
 end
 
 """
 Compute the overall energy in the system
 """
-function bodies_energy()
+function bodies_energy(bodies)
     fill!(dx, 0.0)
     distance = 0.
     energy = 0.
@@ -116,7 +115,7 @@ function bodies_energy()
         energy += bodies[i].mass * dot(bodies[i].v, bodies[i].v) / 2.0
 
         for j = (i+1):length(bodies)
-            dx .= bodies[i].x .- bodies[j].x
+            @. dx = bodies[i].x - bodies[j].x
 
             distance = norm(dx)
             energy -= (bodies[i].mass * bodies[j].mass) / distance
@@ -126,19 +125,19 @@ function bodies_energy()
 end
 
 
-function main_loop(N::Int64)
+function main_loop(N::Int64,bodies)
 
     # Pre-allocate some arrays and variables
 
-    offset_momentum()
+    offset_momentum(bodies)
 
-    @printf "%.9f\n" bodies_energy()
+    @printf "%.9f\n" bodies_energy(bodies)
 
-    (for i = 1:N; bodies_advance(0.01); end)
+    for i = 1:N; bodies_advance!(bodies,0.01); end
 
     #Profile.print()
 
-    @printf "%.9f\n" bodies_energy()
+    @printf "%.9f\n" bodies_energy(bodies)
 
 end
 
@@ -147,5 +146,5 @@ if length(ARGS) >= 1
     N = parse(Int64, ARGS[1])
 end
 
-@time main_loop(N)
-#main_loop(N)
+main_loop(N,_bodies)
+@time main_loop(N,_bodies)
