@@ -261,7 +261,7 @@ bodies = [
 #  return 0;
 #}
 
-function main(iterations::Int)
+function main(iterations::Int, bodies)
     n::Int = iterations
 
     offset_momentum(NBODIES, bodies);
@@ -272,8 +272,10 @@ function main(iterations::Int)
     @printf("%.9f\n", energy(NBODIES, bodies))
 end
 
-N = 5000000
+N = 10000
 if length(ARGS) >= 1
     N = parse(Int64, ARGS[1]);
 end
-@time main(N)
+
+main(N,bodies)
+@time main(N,bodies)
