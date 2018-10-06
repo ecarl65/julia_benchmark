@@ -78,7 +78,7 @@ significant digits).
 | Python (CPython) | ~100-200x      |
 | Python (pypy)    | ~10-20x        |
 | Cython           |  1.4x          |
-| Julia (best)     |  1.6           |
+| Julia (best)     |  1.6x          |
 | Julia (clean)    |  3x            |
 | Julia (naïve)    | >1000x         |
 | Java             |  1.6x          |
