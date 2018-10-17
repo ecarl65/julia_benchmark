@@ -96,10 +96,11 @@ function main(iterations::Int, bodies)
     @printf("%.9f\n", energy(bodies))
 end
 
-N = 10000
+# N = 10000
+N = 5000000
 if length(ARGS) >= 1
     N = parse(Int64, ARGS[1]);
 end
 
-main(N,bodies)
+# main(N,bodies)
 @time main(N,bodies)

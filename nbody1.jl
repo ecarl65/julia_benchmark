@@ -141,10 +141,11 @@ function main_loop(N::Int64,bodies)
 
 end
 
-N = 10000
+# N = 10000
+N = 5000000
 if length(ARGS) >= 1
     N = parse(Int64, ARGS[1])
 end
 
-main_loop(N,_bodies)
+# main_loop(N,_bodies)
 @time main_loop(N,_bodies)

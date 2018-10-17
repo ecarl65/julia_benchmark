@@ -1,9 +1,14 @@
 # N-body simulation
 # Based off of the Computer Language Benchmarks Game
 
+__precompile__()
+
+module nbody2
+
 using Printf
 using LinearAlgebra
 using StaticArrays
+using BenchmarkTools
 
 # Constants
 const SOLAR_MASS = 4*pi*pi
@@ -18,49 +23,6 @@ mutable struct Body
 end
 
 # Define each of the body initial values
-_bodies = [
-                 # Sun
-                 Body(MVector(0.0, 0.0, 0.0), 
-                      0.0, 
-                      MVector(0.0, 0.0, 0.0), 
-                      SOLAR_MASS),
-                 # Jupiter
-                 Body(MVector(4.84143144246472090e+00, 
-                              -1.16032004402742839e+00, 
-                              -1.03622044471123109e-01),
-                      0.0,
-                      MVector(1.66007664274403694e-03 * DAYS_PER_YEAR, 
-                              7.69901118419740425e-03 * DAYS_PER_YEAR, 
-                              -6.90460016972063023e-05 * DAYS_PER_YEAR),
-                      9.54791938424326609e-04 * SOLAR_MASS),
-                 # Saturn
-                 Body(MVector(8.34336671824457987e+00,
-                              4.12479856412430479e+00,
-                              -4.03523417114321381e-01),
-                      0.0,
-                      MVector(-2.76742510726862411e-03 * DAYS_PER_YEAR,
-                              4.99852801234917238e-03 * DAYS_PER_YEAR,
-                              2.30417297573763929e-05 * DAYS_PER_YEAR),
-                      2.85885980666130812e-04 * SOLAR_MASS),
-                 # Uranus
-                 Body(MVector(1.28943695621391310e+01,
-                              -1.51111514016986312e+01,
-                              -2.23307578892655734e-01),
-                      0.0,
-                      MVector(2.96460137564761618e-03 * DAYS_PER_YEAR,
-                              2.37847173959480950e-03 * DAYS_PER_YEAR,
-                              -2.96589568540237556e-05 * DAYS_PER_YEAR),
-                      4.36624404335156298e-05 * SOLAR_MASS),
-                 # Neptune
-                 Body(MVector(1.53796971148509165e+01,
-                              -2.59193146099879641e+01,
-                              1.79258772950371181e-01),
-                      0.0,
-                      MVector(2.68067772490389322e-03 * DAYS_PER_YEAR,
-                              1.62824170038242295e-03 * DAYS_PER_YEAR,
-                              -9.51592254519715870e-05 * DAYS_PER_YEAR),
-                      5.15138902046611451e-05 * SOLAR_MASS),
-                ]
 
 # Pre-define some arrays and values globally to reduce the amount of copying
 # dx = zeros(3)
@@ -68,11 +30,9 @@ _bodies = [
 """
 Not sure exactly what this is supposed to be doing
 """
-function offset_momentum(bodies)
+function offset_momentum!(bodies)
     for i = 1:length(bodies)
-        for k = 1:3
-            bodies[1].v[k] -= bodies[i].v[k] * bodies[i].mass / SOLAR_MASS
-        end
+        @. bodies[1].v -= bodies[i].v * (bodies[i].mass / SOLAR_MASS)
     end
 end
 
@@ -127,24 +87,75 @@ end
 
 function main_loop(bodies,N::Int64)
 
-    # Pre-allocate some arrays and variables
-
-    offset_momentum(bodies)
+    offset_momentum!(bodies)
 
     @printf "%.9f\n" bodies_energy(bodies)
 
     for i = 1:N; bodies_advance!(bodies,0.01); end
 
-    #Profile.print()
-
     @printf "%.9f\n" bodies_energy(bodies)
 
 end
 
-N = 10000
+# N = 10000
+N = 5000000
 if length(ARGS) >= 1
     N = parse(Int64, ARGS[1])
 end
 
-main_loop(_bodies,N)
-@time main_loop(_bodies,N)
+function myrun()
+    _bodies = MVector(
+                     # Sun
+                     Body(MVector(0.0, 0.0, 0.0), 
+                          0.0, 
+                          MVector(0.0, 0.0, 0.0), 
+                          SOLAR_MASS),
+                     # Jupiter
+                     Body(MVector(4.84143144246472090e+00, 
+                                  -1.16032004402742839e+00, 
+                                  -1.03622044471123109e-01),
+                          0.0,
+                          MVector(1.66007664274403694e-03 * DAYS_PER_YEAR, 
+                                  7.69901118419740425e-03 * DAYS_PER_YEAR, 
+                                  -6.90460016972063023e-05 * DAYS_PER_YEAR),
+                          9.54791938424326609e-04 * SOLAR_MASS),
+                     # Saturn
+                     Body(MVector(8.34336671824457987e+00,
+                                  4.12479856412430479e+00,
+                                  -4.03523417114321381e-01),
+                          0.0,
+                          MVector(-2.76742510726862411e-03 * DAYS_PER_YEAR,
+                                  4.99852801234917238e-03 * DAYS_PER_YEAR,
+                                  2.30417297573763929e-05 * DAYS_PER_YEAR),
+                          2.85885980666130812e-04 * SOLAR_MASS),
+                     # Uranus
+                     Body(MVector(1.28943695621391310e+01,
+                                  -1.51111514016986312e+01,
+                                  -2.23307578892655734e-01),
+                          0.0,
+                          MVector(2.96460137564761618e-03 * DAYS_PER_YEAR,
+                                  2.37847173959480950e-03 * DAYS_PER_YEAR,
+                                  -2.96589568540237556e-05 * DAYS_PER_YEAR),
+                          4.36624404335156298e-05 * SOLAR_MASS),
+                     # Neptune
+                     Body(MVector(1.53796971148509165e+01,
+                                  -2.59193146099879641e+01,
+                                  1.79258772950371181e-01),
+                          0.0,
+                          MVector(2.68067772490389322e-03 * DAYS_PER_YEAR,
+                                  1.62824170038242295e-03 * DAYS_PER_YEAR,
+                                  -9.51592254519715870e-05 * DAYS_PER_YEAR),
+                          5.15138902046611451e-05 * SOLAR_MASS),
+                    )
+
+    main_loop(_bodies,N)
+
+end
+
+end
+
+
+# @profile main_loop(_bodies,N)
+# @benchmark main_loop(_bodies,N)
+# main_loop(_bodies,N-1)
+# Profile.print()
